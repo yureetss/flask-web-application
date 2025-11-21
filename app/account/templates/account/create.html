@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление записи
+{% endblock %}
+
+{% block body %}
+<h1>Добавление записи</h1>
+
+<form method="post" class="p-3" style="max-width: 500px; margin: auto;">
+    <input type="text" name="title" placeholder="Введите заголовок" class="form-control mb-3">
+    <textarea name="text" placeholder="Введите текст" class="form-control dynamic-textarea mb-3"></textarea>
+    <button class="btn btn-success w-100" type="submit">Добавить</button>
+</form>
+<script src="{{ url_for('static', filename='js/textarea-autoresize.js') }}"></script>
+
+{% endblock %}

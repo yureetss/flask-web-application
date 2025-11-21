@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ post.title }}
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-4">
+    <h1>{{ post.title }}</h1>
+    <hr>
+    <p>{{ post.text }}</p>
+    <div class="author-block d-flex align-items-center mt-3 mb-3">
+      <img src="{{ url_for('static', filename='uploads/avatars/' ~ post.author.avatar) }}"
+      class="avatar-img me-2" alt="avatar">
+      <div>
+       <a class="author-link" style="margin-left: 10px;" href="{{ url_for('records.author_page', username=post.author.username) }}">
+         {{ post.author.username }}
+       </a>
+      </div>
+    </div>
+      <hr>
+
+      <h3>Комментарии</h3>
+
+      {% for comment in comments %}
+        <div class="comment mb-3 p-3 border rounded">
+          <div class="d-flex align-items-center mb-2">
+            <img src="{{ url_for('static', filename='uploads/avatars/' ~ comment.author.avatar) }}"
+                class="avatar-img me-2" alt="avatar" style="width:32px;height:32px;">
+            <strong>
+              <a href="{{ url_for('records.author_page', username=comment.author.username) }}"
+              class="comment-author-link">{{ comment.author.username }}</a>
+            </strong>
+            <span class="text-muted ms-2" style="font-size: 12px;">
+              {{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}
+            </span>
+
+            {% if session.get('user_id') == comment.user_id or session.get('user_id') == post.author_id %}
+              <a href="{{ url_for('records.delete_comment', comment_id=comment.id) }}"
+                class="btn btn-sm btn-danger ms-auto">Удалить</a>
+            {% endif %}
+          </div>
+
+          <div>{{ comment.text }}</div>
+        </div>
+      {% else %}
+        <p class="text-muted">Пока нет комментариев.</p>
+      {% endfor %}
+
+      <hr>
+
+      {% if session.get('user_id') %}
+      <form method="POST" class="mt-4">
+        <textarea name="comment_text" class="form-control" rows="3" placeholder="Напишите комментарий..." required></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+      </form>
+      {% else %}
+        <p>
+          <a href="/signin">Войдите</a>, чтобы оставлять комментарии.
+        </p>
+      {% endif %}
+
+      <button class="btn btn-secondary mt-4" onclick="history.back();">Назад</button>
+    </div>
+    {% endblock %}

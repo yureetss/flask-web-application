@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block body %}
+<div class="form-container">
+    <form method="post">
+        <h1 class="h3 mb-3 fw-normal text-center">Пожалуйста, войдите</h1>
+        
+        <div class="form-floating mb-3">
+            <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Username" required>
+            <label for="floatingInput">Никнейм</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+            <label for="floatingPassword">Пароль</label>
+        </div>
+        {% if error_incorrect %}
+        <div class="alert alert-danger mt-3">{{ error_incorrect }}</div>
+        {% endif %}
+        <button class="btn btn-primary w-100 py-2" type="submit">Войти</button>
+    </form>
+</div>
+{% endblock %}
+

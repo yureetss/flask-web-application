@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column align-items-center mb-4">
+    <div class="d-flex align-items-center gap-4">
+        <div class="avatar-wrapper position-relative">
+            <img src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}"
+                 id="avatarPreview"
+                 class="avatar-img rounded-circle"
+                 alt="avatar">
+            <div class="avatar-overlay rounded-circle"
+                 onclick="document.getElementById('avatarInput').click()">
+                Сменить
+            </div>
+            <form id="avatarForm"
+                  action="{{ url_for('user_account.change_avatar') }}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input type="file" id="avatarInput" name="avatar" accept="image/*" hidden>
+            </form>
+        </div>
+        
+        <div class="d-flex flex-column">
+            <span class="text-muted">
+                Добро пожаловать,
+            </span>
+            <span class="fw-bold" style="font-size: 1.6rem;">
+                {{ user.username }}
+            </span>
+            <div class="mt-2">
+                <span class="badge bg-secondary d-block mb-1">
+                    Регистрация: {{ user.date_registered.strftime('%d.%m.%Y') }}
+                </span>
+                <span class="badge bg-info text-dark d-block mb-1">
+                    Постов: {{ user.posts|length }}
+                </span>
+                <span class="badge bg-warning text-dark d-block mb-1">
+                    Email: {{ user.mail }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
+    <a href="{{ url_for('user_account.create') }}" class="btn btn-success">
+        Добавить запись
+    </a>
+</div>
+<script>
+document.getElementById('avatarInput').addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+        const img = document.getElementById('avatarPreview');
+        img.src = URL.createObjectURL(this.files[0]);
+
+        setTimeout(() => {
+            document.getElementById('avatarForm').submit();
+        }, 200);
+    }
+});
+</script>
+{% endblock %}
